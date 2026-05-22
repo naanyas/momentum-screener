@@ -30,6 +30,33 @@ st.set_page_config(
     menu_items=None
 )
 
+# ========================= CROSS-PROPERTY NAV =========================
+# Stays in sync with the link bar on jennawebb.co and the SDAT demo page,
+# so visitors can navigate between properties without losing context.
+st.markdown(
+    """
+    <div style="
+        display:flex; align-items:center; justify-content:space-between;
+        padding:6px 12px; margin-bottom:8px;
+        background:rgba(15,17,22,0.65); border:1px solid rgba(255,255,255,0.08);
+        border-radius:10px; font-size:13px;
+    ">
+      <a href="https://jennawebb.co" style="color:#fff; text-decoration:none; font-weight:600;">
+        <span style="display:inline-block; padding:2px 8px; background:#d97757; color:#0b0d12; border-radius:6px; margin-right:8px;">JW</span>
+        jennawebb.co
+      </a>
+      <div style="display:flex; gap:6px; align-items:center;">
+        <a href="https://jennawebb.co#projects" style="color:rgba(255,255,255,0.7); text-decoration:none; padding:4px 10px; border-radius:6px;">All projects</a>
+        <span style="color:rgba(255,255,255,0.2);">|</span>
+        <a href="https://domain-infra-production.up.railway.app/" style="color:rgba(255,255,255,0.7); text-decoration:none; padding:4px 10px; border-radius:6px;">SDAT demo</a>
+        <span style="padding:4px 10px; background:rgba(20,184,166,0.1); color:#5eead4; border-radius:6px; border:1px solid rgba(20,184,166,0.3);">V9 screener</span>
+        <a href="https://jennawebb.co#contact" style="color:#fff; text-decoration:none; padding:4px 12px; background:rgba(255,255,255,0.1); border-radius:999px; border:1px solid rgba(255,255,255,0.15);">Contact</a>
+      </div>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
 st.title("🚀 V9 — 10-Day Momentum Breakout Screener (Hybrid Speed + Volume + Randomized)")
 st.caption(
     "Short-window model • EMA10 • RSI(7) • 3D & 10D momentum • 10D RVOL • "
@@ -38,6 +65,16 @@ st.caption(
 
 # ========================= SIDEBAR =========================
 with st.sidebar:
+    st.markdown(
+        """
+        <div style="font-size:12px; color:rgba(255,255,255,0.6); margin-bottom:8px;">
+          Part of the <a href="https://jennawebb.co" style="color:#d97757;">jennawebb.co</a> portfolio &middot;
+          <a href="https://domain-infra-production.up.railway.app/" style="color:#a78bfa;">SDAT demo</a>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
 
     st.header("Universe")
     watchlist_text = st.text_area("Watchlist tickers:", value="", height=80)
