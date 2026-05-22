@@ -10,7 +10,10 @@ import random
 
 # ========================= SETTINGS =========================
 THREADS               = 20
-AUTO_REFRESH_MS       = 60_000
+# 3 minutes — long enough for the scan to finish before the next refresh,
+# short enough that the board stays current. Original 60s caused incomplete
+# scans on universes >300 tickers because Streamlit re-ran mid-scan.
+AUTO_REFRESH_MS       = 180_000
 HISTORY_LOOKBACK_DAYS = 10
 INTRADAY_INTERVAL     = "2m"
 INTRADAY_RANGE        = "1d"
@@ -79,7 +82,10 @@ with st.sidebar:
     st.header("Universe")
     watchlist_text = st.text_area("Watchlist tickers:", value="", height=80)
 
-    max_universe = st.slider("Max symbols to scan", 50, 2000, 2000, 50)
+    # Default 300, not 2000. yfinance is rate-limit-sensitive from a
+    # single IP, and 2000-ticker scans regularly fail to complete inside
+    # the auto-refresh window. 300 finishes reliably in ~15-20s.
+    max_universe = st.slider("Max symbols to scan", 50, 2000, 300, 50)
 
     st.subheader("V9 Universe Mode")
     universe_mode = st.radio(
@@ -316,7 +322,14 @@ with st.spinner("Scanning markets..."):
                 min_ofb,universe_mode,volume_rank_pool)
 
 if df.empty:
-    st.error("No results found")
+    st.warning(
+        "No matches in this slice of the universe right now. "
+        "Try widening the price/volume filters in the sidebar, switching to "
+        "**Randomized Slice** or **Live Volume Ranked** mode, or pasting a "
+        "watchlist of specific tickers into the Watchlist field. "
+        "Scans on a typical session also have low-result minutes — "
+        "the board auto-refreshes every 3 minutes."
+    )
 else:
     df=df[df["Score"]>=min_breakout]
     if min_pm_move:df=df[df["PM%"].fillna(-999)>=min_pm_move]
